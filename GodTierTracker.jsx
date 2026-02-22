@@ -146,22 +146,20 @@ export default function GodTierTracker() {
 
   // ── STORAGE LOAD ─────────────────────────────────────────
   useEffect(() => {
-    (async () => {
-      try {
-        const p = await window.storage.get("gt_profile");
-        const d = await window.storage.get("gt_days");
-        if (p) setProfile(JSON.parse(p.value));
-        if (d) setDays(JSON.parse(d.value));
-      } catch {}
-      setLoaded(true);
-    })();
+    try {
+      const p = localStorage.getItem("gt_profile");
+      const d = localStorage.getItem("gt_days");
+      if (p) setProfile(JSON.parse(p));
+      if (d) setDays(JSON.parse(d));
+    } catch {}
+    setLoaded(true);
   }, []);
 
   // ── STORAGE SAVE ─────────────────────────────────────────
   useEffect(() => {
     if (!loaded) return;
-    window.storage.set("gt_profile", JSON.stringify(profile)).catch(() => {});
-    window.storage.set("gt_days", JSON.stringify(days)).catch(() => {});
+    try { localStorage.setItem("gt_profile", JSON.stringify(profile)); } catch {}
+    try { localStorage.setItem("gt_days", JSON.stringify(days)); } catch {}
   }, [profile, days, loaded]);
 
   // ── XP ENGINE ────────────────────────────────────────────
